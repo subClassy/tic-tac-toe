@@ -1,24 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// The objective is to build a 2 player Tic-Tac-Toe game.
+// Assume that both players are playing on the same computer (the players alternate and they're using the same mouse/touchpad).
+// The Tic-Tac-Toe board is not 3x3, but NxN.
+// The value of N is taken as an input from the user before the game round begins.
+
+import React from "react";
+import Board from "./Components/Board";
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Tic-Tac-Toe</h1>
       </header>
+      <Board />
     </div>
   );
 }
