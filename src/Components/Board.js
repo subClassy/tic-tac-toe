@@ -41,7 +41,7 @@ function creatEmptyMatrix(n) {
 }
 
 function checkWinner(matrix, position, playerTurn) {
-  console.log(matrix, position, playerTurn);
+  // console.log(matrix, position, playerTurn);
   // check along the row of the recently marked spot
   let winnerExist = true;
   for (let i = 0; i < matrix.length; i++) {
