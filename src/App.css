@@ -34,8 +34,18 @@
 }
 
 .grid-square {
-  width: 5em;
-  height: 5em;
+  width: 4em;
+  height: 4em;
+  max-width: 4em;
+  max-height: 4em;
   background-color: #57656f;
   margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+}
+
+.symbol {
+  font-size: 2em;
 }
