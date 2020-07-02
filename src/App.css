@@ -49,3 +49,43 @@
 .symbol {
   font-size: 2em;
 }
+
+.board {
+  background-color: #282c34;
+}
+
+.error-message {
+  color: red;
+}
+
+.reset-button {
+  background-color: #3b454c;
+  box-shadow: none;
+  border: 1px #57656f solid;
+  font-size: 1.2em;
+  color: white;
+  margin-top: 1em;
+  padding: 0.7em;
+  border-radius: 10px;
+}
+
+.reset-button:hover {
+  background-color: #57656f;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  right: 40px;
+  bottom: 40px;
+}
+
+.modal-container {
+  font-size: 1.5em;
+  display: flex;
+  flex-direction: column;
+}

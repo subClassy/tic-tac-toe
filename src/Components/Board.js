@@ -1,16 +1,27 @@
 import React from "react";
+import ReactModal from "react-modal";
 
-function createGrid(n, onBoxClick) {
+function createGrid(n, onBoxClick, matrix) {
   let gridParts = [];
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
+      let symbol = "";
+      if (matrix[i][j] === 1) {
+        symbol = "X";
+      } else if (matrix[i][j] === 2) {
+        symbol = "O";
+      } else {
+        symbol = "";
+      }
       gridParts.push(
         <div
           className="grid-square"
           key={`${i}+${j}`}
           name={`${i}+${j}`}
           onClick={onBoxClick}
-        />
+        >
+          <span className="symbol">{symbol}</span>
+        </div>
       );
     }
   }
@@ -90,14 +101,40 @@ class Board extends React.Component {
       matrix: creatEmptyMatrix(3),
       playerTurn: 1,
       message: "",
+      winner: "null",
+      showModal: false,
     };
   }
+
+  showModal = () => {
+    this.setState({
+      showModal: true,
+    });
+  };
+
+  closeModal = () => {
+    this.resetBoard();
+    this.setState({
+      showModal: false,
+    });
+  };
 
   onMatrixSizeChange = (event) => {
     this.setState({
       matrixSize: event.target.value,
       matrix: creatEmptyMatrix(event.target.value),
     });
+  };
+
+  checkGameComplete = (matrix) => {
+    let gameComplete = true;
+    for (let i = 0; i < matrix.length; i++) {
+      if (matrix[i].indexOf(0) !== -1) {
+        gameComplete = false;
+        break;
+      }
+    }
+    return gameComplete;
   };
 
   onBoxClick = (event) => {
@@ -107,14 +144,20 @@ class Board extends React.Component {
     let message = "";
     if (matrix[position[0]][position[1]] === 0) {
       matrix[position[0]][position[1]] = playerTurn;
-      let symbol = "";
-      if (playerTurn === 1) {
-        symbol = "X";
-      } else {
-        symbol = "O";
+      if (checkWinner(matrix, position, playerTurn)) {
+        message = "Match Over";
+        this.setState({
+          winner: playerTurn,
+        });
+        this.showModal();
       }
-      event.target.innerHTML = `<span class="symbol">${symbol}</span>`;
-      console.log(checkWinner(matrix, position, playerTurn));
+      if (this.checkGameComplete(matrix)) {
+        message = "draw";
+        this.setState({
+          winner: message,
+        });
+        this.showModal();
+      }
     } else {
       message = "Invalid Move";
     }
@@ -132,6 +175,16 @@ class Board extends React.Component {
     });
   };
 
+  resetBoard = () => {
+    this.setState({
+      playerTurn: 1,
+      message: "",
+      winner: "null",
+      showModal: false,
+      matrix: creatEmptyMatrix(this.state.matrixSize),
+    });
+  };
+
   render() {
     const gridAlignmentStyle = {
       gridTemplateColumns: `repeat(${this.state.matrixSize}, 1fr)`,
@@ -146,11 +199,39 @@ class Board extends React.Component {
             onChange={this.onMatrixSizeChange}
           />
         </div>
+        <h4 className="error-message">{this.state.message}</h4>
         <div className="board">
           <div className="grid-container" style={gridAlignmentStyle}>
-            {createGrid(this.state.matrixSize, this.onBoxClick)}
+            {createGrid(
+              this.state.matrixSize,
+              this.onBoxClick,
+              this.state.matrix
+            )}
+          </div>
+          <div>
+            <button onClick={this.resetBoard} className="reset-button">
+              Reset Board
+            </button>
           </div>
         </div>
+        <ReactModal
+          isOpen={this.state.showModal}
+          contentLabel="Match Result"
+          className="modal"
+        >
+          <div className="modal-container">
+            {this.state.winner !== "draw" ? (
+              <div>
+                The Winner of the Match is Player {this.state.playerTurn}
+              </div>
+            ) : (
+              <div>The Match ended in a Draw</div>
+            )}
+            <button onClick={this.closeModal} className="reset-button">
+              Reset and Continue
+            </button>
+          </div>
+        </ReactModal>
       </div>
     );
   }
